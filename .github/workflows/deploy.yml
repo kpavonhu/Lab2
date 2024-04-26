@@ -19,8 +19,11 @@ jobs:
       id-token: 'write'
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
     - id: 'auth'
-      uses: 'google-github-actions/auth@v0'  
+      uses: 'google-github-actions/auth@v1'  
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
@@ -33,8 +36,8 @@ jobs:
     
     - name: Build and push docker image
       run: |    ## Cambiar el nombre de la aplicacion "nodeapp"
-        docker build -t us.gcr.io/$GCP_PROJECT_ID/pythonappimage:$IMAGE_TAG .  
-        docker push us.gcr.io/$GCP_PROJECT_ID/pythonappimage:$IMAGE_TAG
+        docker build -t us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG .  
+        docker push us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG
       working-directory: ./pythonapp   ## Fijarme en el directorio donde esta la aplicacion
 
     - name: Setup Terraform
@@ -48,8 +51,8 @@ jobs:
       run: |  ## Cambiar el nombre de la aplicacion "nodeapp"
         terraform plan \
         -var="region=us-central1" \
-        -var="project_id=$GCP_PROJECT_ID" \
-        -var="container_image=us.gcr.io/$GCP_PROJECT_ID/pythonappimage:$IMAGE_TAG" \  
+        -var="project_id=${{ secrets.GCP_PROJECT_ID }}" \
+        -var="container_image=us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG" \  
         -out=PLAN
       working-directory: ./Terraform
 
