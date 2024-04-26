@@ -7,6 +7,7 @@ on:
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   TF_STATE_BUCKET_NAME: ${{ secrets.GCP_TF_STATE_BUCKET }}
+  GAR_LOCATION: us-central1
 
 jobs:
   deploy:
@@ -29,9 +30,10 @@ jobs:
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
-    - name: docker auth
-      run: gcloud auth configure-docker us-central1-docker.pkg.dev
-    - run: gcloud auth list
+    
+    - name: Docker configuration
+      run: |-
+        echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
     
     - name: Build and push docker image
       run: |    ## Cambiar el nombre de la aplicacion "nodeapp"
