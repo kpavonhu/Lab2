@@ -20,25 +20,26 @@ jobs:
       id-token: 'write'
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      
+    - uses: 'actions/checkout@v4'
     - id: 'auth'
-      uses: 'google-github-actions/auth@v1'  
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
       with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+        token_format: 'access_token'
+        workload_identity_provider: 'projects/436611642203/locations/global/workloadIdentityPools/k8s-pool/providers/k8s-provider'
+        service_account: 'github-actions@$GCP_PROJECT_ID.iam.gserviceaccount.com'
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
-    
-    - name: Docker configuration
-      run: |-
-        echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
+      
+    - name: docker auth
+      run: gcloud auth configure-docker
+    - run: gcloud auth list
     
     - name: Build and push docker image
       run: |    ## Cambiar el nombre de la aplicacion "nodeapp"
-        docker build -t us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG .  
-        docker push us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG
+        docker build -t us.gcr.io/$GCP_PROJECT_ID/pythonappimage:$IMAGE_TAG .  
+        docker push us.gcr.io/$GCP_PROJECT_ID/pythonappimage:$IMAGE_TAG
       working-directory: ./pythonapp   ## Fijarme en el directorio donde esta la aplicacion
 
     - name: Setup Terraform
