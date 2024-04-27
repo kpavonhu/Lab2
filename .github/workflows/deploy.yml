@@ -20,10 +20,10 @@ jobs:
       id-token: 'write'
 
     steps:
-    - uses: 'actions/checkout@v4'
+    - uses: 'actions/checkout@v3'
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v2'
+      uses: 'google-github-actions/auth@v1'
       with:
         token_format: 'access_token'
         workload_identity_provider: 'projects/436611642203/locations/global/workloadIdentityPools/k8s-pool/providers/k8s-provider'
