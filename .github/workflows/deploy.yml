@@ -32,10 +32,9 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v2'
       
     - name: Docker auth
-      run: gcloud auth configure-docker europe-west1-docker.pkg.dev
-    - run: gcloud auth login
-    - run: gcloud components install docker-credential-gcr
-    - run: docker-credential-gcr configure-docker
+      run:  gcloud auth login 
+    - run:  gcloud auth configure-docker europe-west1-docker.pkg.dev
+
     
     - name: Build and push docker image
       run: |    ## Cambiar el nombre de la aplicacion "nodeapp"
