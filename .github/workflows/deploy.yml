@@ -32,7 +32,7 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v2'
       
     - name: docker auth
-      run: gcloud auth configure-docker us-central1-docker.pkg.dev
+      ##run: gcloud auth configure-docker us-central1-docker.pkg.dev
     - run: |-
         echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
     
