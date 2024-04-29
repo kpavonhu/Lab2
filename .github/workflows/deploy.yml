@@ -19,14 +19,13 @@ jobs:
       id-token: 'write'
 
     steps:
-    - uses: 'actions/checkout@v3'
+    - name: Checkout
+      uses: actions/checkout@v4
+
     - id: 'auth'
-      name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
-        token_format: 'access_token'    ### fijarme en workload_identity_provider 
-        workload_identity_provider: 'projects/436611642203/locations/global/workloadIdentityPools/k8s-pool/providers/k8s-provider'
-        service_account: 'github-actions@my-project-57433-labmodule2.iam.gserviceaccount.com'
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
