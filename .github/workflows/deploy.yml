@@ -31,14 +31,16 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
       
-    - name: docker auth
-      run: gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev
-    - run: gcloud auth list
+    - name: Docker auth
+      run: gcloud auth configure-docker europe-west1-docker.pkg.dev
+    - run: gcloud auth login
+    - run: gcloud components install docker-credential-gcr
+    - run: docker-credential-gcr configure-docker
     
     - name: Build and push docker image
       run: |    ## Cambiar el nombre de la aplicacion "nodeapp"
-        docker build -t us.gcr.io/$GCP_PROJECT_ID/pythonappimage:$IMAGE_TAG .  
-        docker push us.gcr.io/$GCP_PROJECT_ID/pythonappimage:$IMAGE_TAG
+        docker build -t us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG .  
+        docker push us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG
       working-directory: ./pythonapp   ## Fijarme en el directorio donde esta la aplicacion
 
     - name: Setup Terraform
