@@ -31,10 +31,10 @@ jobs:
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v2'
       
-    - name: Docker auth
-      run:  gcloud auth login 
-    - run:  gcloud auth configure-docker europe-west1-docker.pkg.dev
-
+    - name: Docker configuration
+    ############################## - run: gcloud auth login
+    - run: |-
+        echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
     
     - name: Build and push docker image
       run: |    ## Cambiar el nombre de la aplicacion "nodeapp"
