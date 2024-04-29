@@ -45,7 +45,7 @@ jobs:
 
     - name: Terraform init
       ##run: gcloud auth application-default login --project my-project-57433-labmodule2
-    - run: terraform init -reconfigure 
+      run: terraform init -reconfigure 
       working-directory: ./Terraform
 
     - name: Terraform Plan
