@@ -32,7 +32,7 @@ jobs:
       
     - name: docker auth
       run: gcloud auth configure-docker us-central1-docker.pkg.dev
-    - run: gcloud auth list
+      ## run: gcloud auth list
     
     - name: Build and push docker image
       run: |    ## Cambiar el nombre de la aplicacion "nodeapp"
