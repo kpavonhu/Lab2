@@ -32,8 +32,7 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v2'
       
     - name: Docker configuration
-    ############################## - run: gcloud auth login
-    - run: |-
+      run: |-
         echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
     
     - name: Build and push docker image
