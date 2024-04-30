@@ -46,7 +46,7 @@ jobs:
 
     - name: Terraform init
       run: |
-        gcloud auth activate-service-account
+        gcloud auth activate-service-account github-actions@my-project-57433-labmodule2.iam.gserviceaccount.com 
         terraform init -backend-config="bucket=${{ secrets.GCP_TF_STATE_BUCKET }}" -backend-config="prefix=test"
       working-directory: ./Terraform
 
