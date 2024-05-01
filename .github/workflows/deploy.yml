@@ -52,7 +52,7 @@ jobs:
     - name: Terraform Plan
       run: |  
         terraform plan \
-        -var=region=us-central1' \
+        -var=region=us-central1 \
         -var=project_id=${{ secrets.GCP_PROJECT_ID }} \
         -var=container_image=us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG \  
         -out=PLAN
