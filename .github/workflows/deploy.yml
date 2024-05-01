@@ -49,14 +49,13 @@ jobs:
         terraform init -backend-config="bucket=k8s-terraform-state-file" -backend-config="prefix=test"
       working-directory: ./Terraform
 
-    - name: Terraform plan 
-      run: |  ## Cambiar el nombre de la aplicacion "nodeapp"
-        terraform plan -chdir=./Terraform \
-        --var='region=us-central1' \
-        --var='project_id=${{ secrets.GCP_PROJECT_ID }}' \
-        --var='container_image=us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG' \  
-        --out=PLAN
-      working-directory: ./Terraform
+    - name: Terraform Plan
+      run: |
+        terraform plan \
+        -var="region=us-central1" \
+        -var="project_id=$GCP_PROJECT_ID" \
+        -var="container_image=us.gcr.io/$GCP_PROJECT_ID/nodeappimage:$IMAGE_TAG" \
+        -out=PLAN
 
     - name: Terraform apply
       run: terraform apply PLAN
