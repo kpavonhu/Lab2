@@ -56,7 +56,7 @@ jobs:
         -var="project_id=${{ secrets.GCP_PROJECT_ID }}" \
         -var="container_image=us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG" \  
         -out=PLAN
-      working-directory: .Terraform
+      working-directory: ./Terraform
 
     - name: Terraform Apply
       run: terraform apply PLAN
