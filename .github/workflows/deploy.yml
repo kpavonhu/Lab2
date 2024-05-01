@@ -52,10 +52,10 @@ jobs:
     - name: Terraform plan
       run: |  ## Cambiar el nombre de la aplicacion "nodeapp"
         terraform plan \
-        '-var="region=us-central1"' \
-        '-var="project_id=${{ secrets.GCP_PROJECT_ID }}"' \
-        '-var="container_image=us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG"' \  
-        -out=PLAN
+        '--var="region=us-central1"' \
+        '--var="project_id=${{ secrets.GCP_PROJECT_ID }}"' \
+        '--var="container_image=us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG"' \  
+        '--out=PLAN'
       working-directory: ./Terraform
 
     - name: Terraform apply
