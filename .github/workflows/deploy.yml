@@ -55,7 +55,7 @@ jobs:
         -var="region=us-central1" \
         -var="project_id=${GCP_PROJECT_ID}" \
         -var="container_image=us.gcr.io/${GCP_PROJECT_ID}/pythonappimage:${IMAGE_TAG}" \
-        -out=PLAN \
+        -out="PLAN" \
         -chdir="./Terraform"
       
     - name: Terraform apply
