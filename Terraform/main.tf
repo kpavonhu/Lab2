@@ -4,7 +4,7 @@ data "google_container_engine_versions" "default" {
 data "google_client_config" "current" {
 }
 
-resource "google_container_cluster" "default" {
+resource "google_container_cluster" "lab-2" {
   name               = "my-first-cluster"
   location           = "us-central1-c"
   initial_node_count = 3
