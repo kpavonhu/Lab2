@@ -35,7 +35,7 @@ resource "kubernetes_deployment" "name" {
   }
 }
 
-resource "google_compute_address" "default" {
+resource "google_compute_address" "lab-2" {
   name   = "ipforservice"
   region = var.region
 }
