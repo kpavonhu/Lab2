@@ -1,9 +1,9 @@
 resource "kubernetes_deployment" "name" {
   metadata {
-    name = "pythonappdeployment"  ## Cambiar el nombre de la aplicacion "nodeapp"
+    name = "pythonappdeployment"  
     labels = {
       "type" = "backend"
-      "app"  = "pythonapp"      ## Cambiar el nombre de la aplicacion "nodeapp"
+      "app"  = "pythonapp"      
     }
   }
   spec {
@@ -11,20 +11,20 @@ resource "kubernetes_deployment" "name" {
     selector {
       match_labels = {
         "type" = "backend"
-        "app"  = "pythonapp"    ## Cambiar el nombre de la aplicacion "nodeapp"
+        "app"  = "pythonapp"    
       }
     }
     template {
       metadata {
-        name = "pythonapppod"   ## Cambiar el nombre de la aplicacion "nodeapp"
+        name = "pythonapppod"   
         labels = {
           "type" = "backend"
-          "app"  = "pythonapp"  ## Cambiar el nombre de la aplicacion "nodeapp"
+          "app"  = "pythonapp"  
         }
       }
       spec {
         container {
-          name  = "pythoncontainer"   ## Cambiar el nombre del container
+          name  = "pythoncontainer"   
           image = var.container_image
           port {
             container_port = 5000
@@ -42,7 +42,7 @@ resource "google_compute_address" "lab-2" {
 
 resource "kubernetes_service" "appservice" {
   metadata {
-    name = "pythonapp-lb-service"   ## Cambiar el nombre de la aplicacion "nodeapp"
+    name = "pythonapp-lb-service"   "
   }
   spec {
     type             = "LoadBalancer"
@@ -53,7 +53,7 @@ resource "kubernetes_service" "appservice" {
     }
     selector = {
       "type" = "backend"
-      "app"  = "pythonapp"   ## Cambiar el nombre de la aplicacion "nodeapp"
+      "app"  = "pythonapp"   
     }
   }
 }
