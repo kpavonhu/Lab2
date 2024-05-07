@@ -58,6 +58,6 @@ jobs:
         -out=PLAN
       working-directory: ./Terraform
 
-    - name: Terraform apply 
+    - name: Terraform apply
       run: terraform apply PLAN -lock=false
       working-directory: ./Terraform
