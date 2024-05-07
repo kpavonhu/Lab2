@@ -47,7 +47,7 @@ jobs:
     - name: Terraform init
       run: |  ## gcloud auth activate-service-account github-actions@my-project-57433-labmodule2.iam.gserviceaccount.com --project=my-project-57433-labmodule2
         terraform init -backend-config="bucket=k8s-terraform-state-file" -backend-config="prefix=test"
-      working-directory: ./Terraform
+      working-directory: "./Terraform"
 
     - name: Terraform Plan
       run: |
@@ -56,9 +56,9 @@ jobs:
         -var="project_id=${GCP_PROJECT_ID}" \
         -var="container_image=us.gcr.io/${GCP_PROJECT_ID}/pythonappimage:$IMAGE_TAG" \
         -out=PLAN
-      working-directory: ./Terraform
+      working-directory: "./Terraform"
 
       
     - name: Terraform apply
       run: terraform apply PLAN
-      working-directory: ./Terraform
+      working-directory: "./Terraform"
