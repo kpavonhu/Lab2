@@ -42,7 +42,7 @@ resource "google_compute_address" "lab-2" {
 
 resource "kubernetes_service" "appservice" {
   metadata {
-    name = "pythonapp-lb-service"   "
+    name = "pythonapp-lb-service"
   }
   spec {
     type             = "LoadBalancer"
