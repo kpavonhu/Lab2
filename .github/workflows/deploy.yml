@@ -49,6 +49,10 @@ jobs:
         terraform init -backend-config="bucket=k8s-terraform-state-file" -backend-config="prefix=test"
       working-directory: ./Terraform
 
+    - name: Terraform destroy
+      run: |
+        terraform destroy 
+
     - name: Terraform Plan
       run: |
         terraform plan -lock=false \
