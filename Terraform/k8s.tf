@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "name" {
           name  = "pythoncontainer"   
           image = var.container_image
           port {
-            container_port = 5000
+            container_port = 80
           }
         }
       }
