@@ -19,7 +19,7 @@ CMD ["flask", "run", "--host", "0.0.0.0"]
 
 ##############################################################################################################
 
-# App.py
+## App.py
 
 This file contains the main code for the Flask application. It defines routes for handling store data.
 
