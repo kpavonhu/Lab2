@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "name" {
           name  = "pythoncontainer"   
           image = var.container_image
           port {
-            container_port = 5000
+            container_port = 8080
           }
         }
       }
@@ -48,8 +48,8 @@ resource "kubernetes_service" "appservice" {
     type             = "LoadBalancer"
     load_balancer_ip = google_compute_address.lab-2.address
     port {
-      port        = 8080
-      target_port = 5000
+      port        = 5000
+      target_port = 8080
     }
     selector = {
       "type" = "backend"
