@@ -15,6 +15,10 @@ stores = [
     }
 ]
 
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+
 
 @app.get('/store') # 'http://12.7.0.0.1:5000/store'
 def get_stores():
