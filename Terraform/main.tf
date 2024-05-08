@@ -1,4 +1,4 @@
-data "google_container_engine_versions" "default" {
+data "google_container_engine_versions" "lab-2" {
   location = "us-central1-c"
 }
 data "google_client_config" "current" {
