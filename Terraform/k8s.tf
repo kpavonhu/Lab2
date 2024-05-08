@@ -49,7 +49,7 @@ resource "kubernetes_service" "appservice" {
     load_balancer_ip = google_compute_address.lab-2.address
     port {
       port        = 5000
-      target_port = 8080
+      target_port = 80
     }
     selector = {
       "type" = "backend"
