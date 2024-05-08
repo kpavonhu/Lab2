@@ -48,7 +48,7 @@ resource "kubernetes_service" "appservice" {
     type             = "LoadBalancer"
     load_balancer_ip = google_compute_address.lab-2.address
     port {
-      port        = 5000
+      port        = 5000/store
       target_port = 5000
     }
     selector = {
