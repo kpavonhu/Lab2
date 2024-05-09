@@ -46,7 +46,7 @@ This file contains the main code for the Flask application. It defines routes fo
          return {"stores": stores}
 
 
-#  Running the Application
+##  Running the Application
 
      Build the Docker image using the provided Dockerfile, and run the container. 
      
@@ -58,7 +58,7 @@ This file contains the main code for the Flask application. It defines routes fo
       After running the container, you can access the API endpoint at http://localhost:5000/store.
 
 
-# providers.tf   >>>>  This file has the google and kubernetes providers to implement in this project
+## providers.tf:  This file has the google and kubernetes providers to implement in this project
 
        
       terraform {
@@ -83,7 +83,7 @@ This file contains the main code for the Flask application. It defines routes fo
       }
 
 
-#  main.tf   >>>> This is the file to create the GKE Cluster
+##  main.tf:  This is the file to create the GKE Cluster
 
 
 	data "google_container_engine_versions" "lab-2" {
@@ -110,7 +110,7 @@ This file contains the main code for the Flask application. It defines routes fo
     }
 
 
-# k8s.tf   >>>>  This file has the "deployment", "service deployment" & the load balancer service on K8s which is based on a yaml structure
+##  k8s.tf:  This file has the "deployment", "service deployment" & the load balancer service on K8s which is based on a yaml structure
 
 
 	  resource "kubernetes_deployment" "name" {
@@ -174,7 +174,7 @@ This file contains the main code for the Flask application. It defines routes fo
     }
 
 
-#  variables.tf    >>>  This variables are called in the files above
+##  variables.tf:  This variables are called in the files above
 
 	variable "region" {
 	}
@@ -184,7 +184,7 @@ This file contains the main code for the Flask application. It defines routes fo
 	}
 
 
-#  outputs.tf  >>>  This file is very useful to get the most important elements to get access to our application at the end of our terraform apply 
+##  outputs.tf:  This file is very useful to get the most important elements to get access to our application at the end of our terraform apply 
 
 	output "cluster_name" {
   	  value = google_container_cluster.lab-2.name
@@ -200,7 +200,7 @@ This file contains the main code for the Flask application. It defines routes fo
 	}
 
 
-#  Setup Github OIDC Authentication for GCP 
+##  Setup Github OIDC Authentication for GCP 
 
 
 ***Get your GCP Project number for reference***
@@ -209,11 +209,11 @@ gcloud projects describe my-project-57433-labmodule2
 
 Example:
 
-createTime: '2024-04-23T15:12:57.012423Z'
-lifecycleState: ACTIVE
-name: My Project 57433 - LabModule2
-projectId: my-project-57433-labmodule2
-projectNumber: '436611642203'
+	createTime: '2024-04-23T15:12:57.012423Z'
+	lifecycleState: ACTIVE
+	name: My Project 57433 - LabModule2
+	projectId: my-project-57433-labmodule2
+	projectNumber: '436611642203'
 
 
 ***Create a new workload Identity pool***
@@ -237,12 +237,12 @@ gcloud iam workload-identity-pools providers create-oidc "k8s-provider" \
 
 ***Create a "service account" using the roles below in GCP***
 
-roles/compute.admin
-roles/container.admin
-roles/container.clusterAdmin
-roles/iam.serviceAccountTokenCreator
-roles/iam.serviceAccountUser
-roles/storage.admin
+	roles/compute.admin
+ 	roles/container.admin
+  	roles/container.clusterAdmin
+   	roles/iam.serviceAccountTokenCreator
+	roles/iam.serviceAccountUser
+	roles/storage.admin
 
 
 ***Add IAM Policy bindings with Github repo, Identity provider and Service account***
@@ -261,7 +261,7 @@ Add secrets to Github Repo
     GCP_TF_STATE_BUCKET
 
 
-#  This is the GitHub Actions workflow for deploying the app to GKE using terraform
+##  This is the GitHub Actions workflow for deploying the app to GKE using terraform
 
 
 	name: Deploy to kubernetes
