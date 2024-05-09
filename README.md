@@ -1,20 +1,30 @@
 # Tools used: 
 
-- Node
+- Flask app based on python 
 - Docker
 - Kubernetes
 - Terraform
 - GitHub Actions
 - GKE(Google Kubernetes Engine)
-- GAR(Artifact Registry)
+- Google Artifact Registry
+
+<img src="https://github.com/kpavonhu/Lab2/assets/112138880/12e536a8-fe7f-41b8-b163-189615cacd9e" width="100" height="100">
+
+<img src="https://github.com/kpavonhu/Lab2/assets/112138880/f2b4d4d4-634f-4e4d-9947-18315c7cf1b2" width="100" height="100">
+
+<img src="https://github.com/kpavonhu/Lab2/assets/112138880/f64d536e-dd6c-4ed8-99c2-29616d987f36" width="100" height="100">
+
+<img src="https://github.com/kpavonhu/Lab2/assets/112138880/bb339acd-426b-46e8-83ce-e97aab340162" width="100" height="100">
 
 
 # Lab2
-Lab modulo 2 
+Modulo 2 | Kevin Pavon 
+
 
 # Flask Store API
 
 This repository contains a Flask application implementing a simple Store API.
+
 
 ## Dockerfile
 
