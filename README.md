@@ -61,25 +61,25 @@ This file contains the main code for the Flask application. It defines routes fo
 # providers.tf   >>>>  This file has the google and kubernetes providers to implement in this project
 
        
-     terraform {
-       required_version = ">= 0.12"
-       backend "gcs" {
-       }
-     }
-     provider "google" {
-       project = var.project_id
-       region  = var.region
-     }
-     provider "kubernetes" {
-       host  = google_container_cluster.lab-2.endpoint
-       token = data.google_client_config.current.access_token
-       client_certificate = base64decode(
-          google_container_cluster.lab-2.master_auth[0].client_certificate,
-       )
-       client_key = base64decode(google_container_cluster.lab-2.master_auth[0].client_key)
-       cluster_ca_certificate = base64decode(
-         google_container_cluster.lab-2.master_auth[0].cluster_ca_certificate,
-       )
+      terraform {
+        required_version = ">= 0.12"
+        backend "gcs" {
+        }
+      }
+      provider "google" {
+        project = var.project_id
+        region  = var.region
+      }
+      provider "kubernetes" {
+        host  = google_container_cluster.lab-2.endpoint
+        token = data.google_client_config.current.access_token
+        client_certificate = base64decode(
+           google_container_cluster.lab-2.master_auth[0].client_certificate,
+        )
+        client_key = base64decode(google_container_cluster.lab-2.master_auth[0].client_key)
+        cluster_ca_certificate = base64decode(
+          google_container_cluster.lab-2.master_auth[0].cluster_ca_certificate,
+        )
       }
 
 
@@ -113,91 +113,91 @@ This file contains the main code for the Flask application. It defines routes fo
 # k8s.tf   >>>>  This file has the "deployment", "service deployment" & the load balancer service on K8s which is based on a yaml structure
 
 
-resource "kubernetes_deployment" "name" {
-  metadata {
-    name = "pythonappdeployment"  
-    labels = {
-      "type" = "backend"
-      "app"  = "pythonapp"      
-    }
-  }
-  spec {
-    replicas = 1
-    selector {
-      match_labels = {
-        "type" = "backend"
-        "app"  = "pythonapp"    
-      }
-    }
-    template {
-      metadata {
-        name = "pythonapppod"   
-        labels = {
-          "type" = "backend"
-          "app"  = "pythonapp"  
-        }
-      }
-      spec {
-        container {
-          name  = "pythoncontainer"   
-          image = var.container_image
-          port {
-            container_port = 80
+	  resource "kubernetes_deployment" "name" {
+  	  metadata {
+      	    name = "pythonappdeployment"  
+    	    labels = {
+              "type" = "backend"
+      	      "app"  = "pythonapp"      
+    	    }
+  	 }
+  	  spec {
+     	    replicas = 1
+    	    selector {
+      	      match_labels = {
+                "type" = "backend"
+                "app"  = "pythonapp"    
+       	      }
+     	  }
+    	  template {
+      	    metadata {
+              name = "pythonapppod"   
+              labels = {
+                "type" = "backend"
+                "app"  = "pythonapp"  
+               }
+      	  }
+      	  spec {
+            container {
+              name  = "pythoncontainer"   
+              image = var.container_image
+              port {
+                container_port = 80
+              }
+            }
           }
         }
       }
     }
-  }
-}
 
-resource "google_compute_address" "lab-2" {
-  name   = "ipforservice"
-  region = var.region
-}
+	   resource "google_compute_address" "lab-2" {
+  	     name   = "ipforservice"
+  	     region = var.region
+	   }
 
-resource "kubernetes_service" "appservice" {
-  metadata {
-    name = "pythonapp-lb-service"
-  }
-  spec {
-    type             = "LoadBalancer"
-    load_balancer_ip = google_compute_address.lab-2.address
-    port {
-      port        = 5000
-      target_port = 80
+	   resource "kubernetes_service" "appservice" {
+  	     metadata {
+      	       name = "pythonapp-lb-service"
+  	     }
+      	    spec {
+    	      type             = "LoadBalancer"
+    	      load_balancer_ip = google_compute_address.lab-2.address
+    	      port {
+      	        port        = 5000
+      	        target_port = 80
+    	      }
+    	      selector = {
+       		"type" = "backend"
+      		"app"  = "pythonapp"   
+    	      }
+  	    }
     }
-    selector = {
-      "type" = "backend"
-      "app"  = "pythonapp"   
-    }
-  }
-}
 
 
 #  variables.tf    >>>  This variables are called in the files above
 
-variable "region" {
-}
-variable "project_id" {
-}
-variable "container_image" {
-}
+	variable "region" {
+	}
+	variable "project_id" {
+	}
+	variable "container_image" {
+	}
 
 
 #  outputs.tf  >>>  This file is very useful to get the most important elements to get access to our application at the end of our terraform apply 
 
-output "cluster_name" {
-  value = google_container_cluster.lab-2.name
-}
-output "cluster_endpoint" {
-  value = google_container_cluster.lab-2.endpoint
-}
-output "cluster_location" {
-  value = google_container_cluster.lab-2.location
-}
-output "load-balancer-ip" {
-  value = google_compute_address.lab-2.address
-}
+	output "cluster_name" {
+  	  value = google_container_cluster.lab-2.name
+	}
+	output "cluster_endpoint" {
+  	  value = google_container_cluster.lab-2.endpoint
+	}
+	output "cluster_location" {
+  	  value = google_container_cluster.lab-2.location
+	}
+	output "load-balancer-ip" {
+  	  value = google_compute_address.lab-2.address
+	}
 
 
 #  Setup Github OIDC Authentication for GCP 
@@ -264,22 +264,22 @@ Add secrets to Github Repo
 #  This is the GitHub Actions workflow for deploying the app to GKE using terraform
 
 
-name: Deploy to kubernetes
-on:
-  push:
-    branches:
-      - "main"
+	name: Deploy to kubernetes
+	on:
+  	  push:
+    	    branches:
+      	       - "main"
 
-env:
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  TF_STATE_BUCKET_NAME: ${{ secrets.GCP_TF_STATE_BUCKET }}
-  GAR_LOCATION: us-central1
+	env:
+  	   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  	   TF_STATE_BUCKET_NAME: ${{ secrets.GCP_TF_STATE_BUCKET }}
+  	   GAR_LOCATION: us-central1
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_TAG: ${{ github.sha }}
+	jobs:
+  	  deploy:
+    	    runs-on: ubuntu-latest
+    	  env:
+            IMAGE_TAG: ${{ github.sha }}
 
     permissions:
       contents: 'read'
@@ -331,5 +331,3 @@ jobs:
     - name: Terraform apply
       run: terraform apply -lock=false PLAN
       working-directory: ./Terraform
-
-      ![<img width="800" alt="Captura de pantalla 2024-05-08 a la(s) 9 57 12 p  m" src="https://github.com/kpavonhu/Lab2/assets/112138880/7370133d-30b0-4317-821e-ba9a640f0a65">]
