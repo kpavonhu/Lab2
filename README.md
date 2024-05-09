@@ -86,28 +86,28 @@ This file contains the main code for the Flask application. It defines routes fo
 #  main.tf   >>>> This is the file to create the GKE Cluster
 
 
-data "google_container_engine_versions" "lab-2" {
-  location = "us-central1-c"
-}
-data "google_client_config" "current" {
-}
+	data "google_container_engine_versions" "lab-2" {
+  	  location = "us-central1-c"
+	}
+ 	data "google_client_config" "current" {
+	}
 
-resource "google_container_cluster" "lab-2" {
-  name               = "my-first-cluster"
-  location           = "us-central1-c"
-  initial_node_count = 3
-  min_master_version = data.google_container_engine_versions.default.latest_master_version
+	resource "google_container_cluster" "lab-2" {
+  	  name               = "my-first-cluster"
+  	  location           = "us-central1-c"
+  	  initial_node_count = 3
+  	  min_master_version = data.google_container_engine_versions.default.latest_master_version
 
-  node_config {
-    machine_type = "g1-small"
-    disk_size_gb = 32
-  }
+  	node_config {
+       machine_type = "g1-small"
+       disk_size_gb = 32
+  	}
 
-  provisioner "local-exec" {
-    when    = destroy
-    command = "sleep 90"
-  }
-}
+  	provisioner "local-exec" {
+    	  when    = destroy
+       command = "sleep 90"
+  	 }
+    }
 
 
 # k8s.tf   >>>>  This file has the "deployment", "service deployment" & the load balancer service on K8s which is based on a yaml structure
