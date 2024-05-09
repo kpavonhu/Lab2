@@ -9,14 +9,12 @@ This repository contains a Flask application implementing a simple Store API.
 
 This Dockerfile sets up a Python 3.10 environment with Flask installed and exposes port 5000. It then copies the application files into the container and specifies the command to run the Flask application.
 
-```Dockerfile
 FROM python:3.10
 EXPOSE 5000
 WORKDIR /app
 RUN pip install flask
 COPY . .
-CMD ["flask", "run", "--host", "0.0.0.0"]
-
+CMD ["flask", "run", "--host", "0.0.0.0"] 
 
 ##############################################################################################################
 
@@ -211,10 +209,10 @@ output "load-balancer-ip" {
 
 ##############################################################################################################
 
-                                           # Setup Github OIDC Authentication for GCP #
+#  Setup Github OIDC Authentication for GCP 
 
 
-***  Get your GCP Project number for reference  ***
+***Get your GCP Project number for reference***
 
 gcloud projects describe my-project-57433-labmodule2
 
@@ -227,7 +225,7 @@ projectId: my-project-57433-labmodule2
 projectNumber: '436611642203'
 
 
-***  Create a new workload Identity pool ***
+***Create a new workload Identity pool***
 
 gcloud iam workload-identity-pools create "k8s-pool" \
 --project="my-project-57433-labmodule2" \
@@ -235,7 +233,7 @@ gcloud iam workload-identity-pools create "k8s-pool" \
 --display-name="k8s Pool"
 
 
-***  Create a OIDC (openID Connect) identity provider to authenticate with Github  ***
+***Create a OIDC (openID Connect) identity provider to authenticate with Github***
 
 gcloud iam workload-identity-pools providers create-oidc "k8s-provider" \
 --project="my-project-57433-labmodule2" \
@@ -246,7 +244,7 @@ gcloud iam workload-identity-pools providers create-oidc "k8s-provider" \
 --issuer-uri="https://token.actions.githubusercontent.com"
 
 
-***  Create a "service account" using the roles below in GCP  ***
+***Create a "service account" using the roles below in GCP***
 
 roles/compute.admin
 roles/container.admin
@@ -256,7 +254,7 @@ roles/iam.serviceAccountUser
 roles/storage.admin
 
 
-***  Add IAM Policy bindings with Github repo, Identity provider and Service account  ***
+***Add IAM Policy bindings with Github repo, Identity provider and Service account***
 
 gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT_EMAIL}" \
 --project="my-project-57433-labmodule2" \
@@ -264,7 +262,7 @@ gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT_EMAIL}" \
 --member="principalSet://iam.googleapis.com/projects/436611642203/locations/global/workloadIdentityPools/k8s-pool/attribute.repository/kpavonhu/Lab2
 
 
-***  Create a bucket in GCS to store the terraform state file. ***
+***Create a bucket in GCS to store the terraform state file.***
 
 Add secrets to Github Repo
 
@@ -324,7 +322,7 @@ jobs:
       uses: hashicorp/setup-terraform@v3
 
     - name: Terraform init
-      run: |  ## This command needs to be issued in the google CLI >>   gcloud auth activate-service-account github-actions@my-project-57433-labmodule2.iam.gserviceaccount.com --project=my-project-57433-labmodule2
+      run: |  ##This command needs to be issued in the google CLI   >> gcloud auth activate-service-account github-actions@my-project-57433-labmodule2.iam.gserviceaccount.com --project=my-project-57433-labmodule2
         terraform init -backend-config="bucket=k8s-terraform-state-file" -backend-config="prefix=test"
       working-directory: ./Terraform
 
@@ -345,4 +343,4 @@ jobs:
       run: terraform apply -lock=false PLAN
       working-directory: ./Terraform
 
-[<img width="800" alt="Captura de pantalla 2024-05-08 a la(s) 9 57 12 p  m" src="https://github.com/kpavonhu/Lab2/assets/112138880/df3bf83c-efbc-4da2-bdd7-6315170c7320">](https://github.com/kpavonhu/Lab2/issues/1#issue-2286862419)
+      <img width="800" alt="Captura de pantalla 2024-05-08 a la(s) 9 57 12 p  m" src="https://github.com/kpavonhu/Lab2/assets/112138880/7370133d-30b0-4317-821e-ba9a640f0a65">
