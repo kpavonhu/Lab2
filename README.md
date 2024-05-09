@@ -19,7 +19,7 @@ CMD ["flask", "run", "--host", "0.0.0.0"]
 
 ##############################################################################################################
 
-## App.py
+**App.py**
 
 This file contains the main code for the Flask application. It defines routes for handling store data.
 
@@ -343,4 +343,6 @@ jobs:
     - name: Terraform apply
       run: terraform apply -lock=false PLAN
       working-directory: ./Terraform
+
+<img width="800" alt="Captura de pantalla 2024-05-08 a la(s) 9 57 12 p  m" src="https://github.com/kpavonhu/Lab2/assets/112138880/bdb6474f-8eca-4efa-b09b-29d05a978154">
 
