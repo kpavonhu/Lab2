@@ -9,83 +9,79 @@ This repository contains a Flask application implementing a simple Store API.
 
 This Dockerfile sets up a Python 3.10 environment with Flask installed and exposes port 5000. It then copies the application files into the container and specifies the command to run the Flask application.
 
-FROM python:3.10
-EXPOSE 5000
-WORKDIR /app
-RUN pip install flask
-COPY . .
-CMD ["flask", "run", "--host", "0.0.0.0"] 
+     FROM python:3.10
+     EXPOSE 5000
+     WORKDIR /app
+     RUN pip install flask
+     COPY . .
+     CMD ["flask", "run", "--host", "0.0.0.0"] 
 
-##############################################################################################################
 
 ## App.py 
 
 This file contains the main code for the Flask application. It defines routes for handling store data.
 
+    from flask import Flask, request
 
-from flask import Flask, request
+    app = Flask(__name__)
 
-app = Flask(__name__)
-
-stores = [
-    {
-        "name": "My Store",
-        "items": [
-            {
+    stores = [
+        {
+            "name": "My Store",
+            "items": [
+                {
                 "name": "Chair",
                 "price": 15.99
-            }
-        ]
-        
-    }
-]
+                }
+            ]
+         }
+     ]
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"     "You can put this "Hello, World" to avoid seeing the URL NOT FOUND message" 
+     @app.route("/")
+     def hello_world():
+         return "<p>Hello, World!</p>"     "You can put this 'Hello, World' to avoid seeing the URL NOT FOUND message" 
 
-@app.get('/store')
-def get_stores():
-    return {"stores": stores}
+     @app.get('/store')
+     def get_stores():
+         return {"stores": stores}
 
-##############################################################################################################
 
 #  Running the Application
 
-Build the Docker image using the provided Dockerfile, and run the container. The Flask application will be accessible at http://localhost:5000/store.
+     Build the Docker image using the provided Dockerfile, and run the container. 
+     
+     The Flask application will be accessible at http://localhost:5000/store.
 
-docker build -t flask-store .
-docker run -p 5000:5000 flask-store
+      docker build -t flask-store .
+      docker run -p 5000:5000 flask-store
 
-After running the container, you can access the API endpoint at http://localhost:5000/store.
+      After running the container, you can access the API endpoint at http://localhost:5000/store.
 
-
-##############################################################################################################
 
 # providers.tf   >>>>  This file has the google and kubernetes providers to implement in this project
 
-terraform {
-  required_version = ">= 0.12"
-  backend "gcs" {
-  }
-}
-provider "google" {
-  project = var.project_id
-  region  = var.region
-}
-provider "kubernetes" {
-  host  = google_container_cluster.lab-2.endpoint
-  token = data.google_client_config.current.access_token
-  client_certificate = base64decode(
-    google_container_cluster.lab-2.master_auth[0].client_certificate,
-  )
-  client_key = base64decode(google_container_cluster.lab-2.master_auth[0].client_key)
-  cluster_ca_certificate = base64decode(
-    google_container_cluster.lab-2.master_auth[0].cluster_ca_certificate,
-  )
-}
+       
+     terraform {
+       required_version = ">= 0.12"
+       backend "gcs" {
+       }
+     }
+     provider "google" {
+       project = var.project_id
+       region  = var.region
+     }
+     provider "kubernetes" {
+       host  = google_container_cluster.lab-2.endpoint
+       token = data.google_client_config.current.access_token
+       client_certificate = base64decode(
+          google_container_cluster.lab-2.master_auth[0].client_certificate,
+       )
+       client_key = base64decode(google_container_cluster.lab-2.master_auth[0].client_key)
+       cluster_ca_certificate = base64decode(
+         google_container_cluster.lab-2.master_auth[0].cluster_ca_certificate,
+       )
+      }
 
-##############################################################################################################
 
 #  main.tf   >>>> This is the file to create the GKE Cluster
 
@@ -113,7 +109,6 @@ resource "google_container_cluster" "lab-2" {
   }
 }
 
-##############################################################################################################
 
 # k8s.tf   >>>>  This file has the "deployment", "service deployment" & the load balancer service on K8s which is based on a yaml structure
 
@@ -178,7 +173,6 @@ resource "kubernetes_service" "appservice" {
   }
 }
 
-##############################################################################################################
 
 #  variables.tf    >>>  This variables are called in the files above
 
@@ -189,7 +183,6 @@ variable "project_id" {
 variable "container_image" {
 }
 
-##############################################################################################################
 
 #  outputs.tf  >>>  This file is very useful to get the most important elements to get access to our application at the end of our terraform apply 
 
@@ -206,8 +199,6 @@ output "load-balancer-ip" {
   value = google_compute_address.lab-2.address
 }
 
-
-##############################################################################################################
 
 #  Setup Github OIDC Authentication for GCP 
 
@@ -269,8 +260,6 @@ Add secrets to Github Repo
     GCP_PROJECT_ID
     GCP_TF_STATE_BUCKET
 
-
-##############################################################################################################
 
 #  This is the GitHub Actions workflow for deploying the app to GKE using terraform
 
@@ -343,4 +332,4 @@ jobs:
       run: terraform apply -lock=false PLAN
       working-directory: ./Terraform
 
-      <img width="800" alt="Captura de pantalla 2024-05-08 a la(s) 9 57 12 p  m" src="https://github.com/kpavonhu/Lab2/assets/112138880/7370133d-30b0-4317-821e-ba9a640f0a65">
+      ![<img width="800" alt="Captura de pantalla 2024-05-08 a la(s) 9 57 12 p  m" src="https://github.com/kpavonhu/Lab2/assets/112138880/7370133d-30b0-4317-821e-ba9a640f0a65">]
