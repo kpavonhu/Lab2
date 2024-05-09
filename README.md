@@ -41,6 +41,10 @@ stores = [
     }
 ]
 
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"     "You can put this "Hello, World" to avoid seeing the URL NOT FOUND message" 
+
 @app.get('/store')
 def get_stores():
     return {"stores": stores}
@@ -49,7 +53,7 @@ def get_stores():
 
 #  Running the Application
 
-To run this application using Docker, make sure you have Docker installed on your system. Then, build the Docker image using the provided Dockerfile, and run the container. The Flask application will be accessible at http://localhost:5000/store.
+Build the Docker image using the provided Dockerfile, and run the container. The Flask application will be accessible at http://localhost:5000/store.
 
 docker build -t flask-store .
 docker run -p 5000:5000 flask-store
@@ -59,7 +63,7 @@ After running the container, you can access the API endpoint at http://localhost
 
 ##############################################################################################################
 
-# providers.tf   >>>>  use google and kubernetes providers 
+# providers.tf   >>>>  This file has the google and kubernetes providers to implement in this project
 
 terraform {
   required_version = ">= 0.12"
@@ -84,9 +88,10 @@ provider "kubernetes" {
 
 ##############################################################################################################
 
-#  main.tf   >>>> This file is for creating the GKE Cluster 
+#  main.tf   >>>> This is the file to create the GKE Cluster
 
-data "google_container_engine_versions" "default" {
+
+data "google_container_engine_versions" "lab-2" {
   location = "us-central1-c"
 }
 data "google_client_config" "current" {
@@ -111,7 +116,7 @@ resource "google_container_cluster" "lab-2" {
 
 ##############################################################################################################
 
-# k8s.tf   >>>>  For deployment and service deployment on K8s 
+# k8s.tf   >>>>  This file has the "deployment", "service deployment" & the load balancer service on K8s which is based on a yaml structure
 
 
 resource "kubernetes_deployment" "name" {
@@ -143,7 +148,7 @@ resource "kubernetes_deployment" "name" {
           name  = "pythoncontainer"   
           image = var.container_image
           port {
-            container_port = 5000
+            container_port = 80
           }
         }
       }
@@ -164,8 +169,8 @@ resource "kubernetes_service" "appservice" {
     type             = "LoadBalancer"
     load_balancer_ip = google_compute_address.lab-2.address
     port {
-      port        = 80
-      target_port = 5000
+      port        = 5000
+      target_port = 80
     }
     selector = {
       "type" = "backend"
@@ -176,7 +181,7 @@ resource "kubernetes_service" "appservice" {
 
 ##############################################################################################################
 
-#  variables.tf    
+#  variables.tf    >>>  This variables are called in the files above
 
 variable "region" {
 }
@@ -187,7 +192,7 @@ variable "container_image" {
 
 ##############################################################################################################
 
-#  outputs.tf
+#  outputs.tf  >>>  This file is very useful to get the most important elements to get access to our application at the end of our terraform apply 
 
 output "cluster_name" {
   value = google_container_cluster.lab-2.name
@@ -205,7 +210,7 @@ output "load-balancer-ip" {
 
 ##############################################################################################################
 
-                                           # Setup Github OIDC Authentication with GCP #
+                                           # Setup Github OIDC Authentication for GCP #
 
 
 ***  Get your GCP Project number for reference  ***
@@ -229,7 +234,7 @@ gcloud iam workload-identity-pools create "k8s-pool" \
 --display-name="k8s Pool"
 
 
-***  Create a oidc identity provider for authenticating with Github  ***
+***  Create a OIDC (openID Connect) identity provider to authenticate with Github  ***
 
 gcloud iam workload-identity-pools providers create-oidc "k8s-provider" \
 --project="my-project-57433-labmodule2" \
@@ -240,7 +245,7 @@ gcloud iam workload-identity-pools providers create-oidc "k8s-provider" \
 --issuer-uri="https://token.actions.githubusercontent.com"
 
 
-***  Create a service account with these permissions  ***
+***  Create a "service account" using the roles below in GCP  ***
 
 roles/compute.admin
 roles/container.admin
@@ -250,7 +255,7 @@ roles/iam.serviceAccountUser
 roles/storage.admin
 
 
-***  Add IAM Policy bindings with Github repo, Identity provider and service account  ***
+***  Add IAM Policy bindings with Github repo, Identity provider and Service account  ***
 
 gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT_EMAIL}" \
 --project="my-project-57433-labmodule2" \
@@ -258,7 +263,7 @@ gcloud iam service-accounts add-iam-policy-binding "${SERVICE_ACCOUNT_EMAIL}" \
 --member="principalSet://iam.googleapis.com/projects/436611642203/locations/global/workloadIdentityPools/k8s-pool/attribute.repository/kpavonhu/Lab2
 
 
-***  Create a bucket in GCS for storing terraform state file. ***
+***  Create a bucket in GCS to store the terraform state file. ***
 
 Add secrets to Github Repo
 
@@ -269,6 +274,7 @@ Add secrets to Github Repo
 ##############################################################################################################
 
 #  This is the GitHub Actions workflow for deploying the app to GKE using terraform
+
 
 name: Deploy to kubernetes
 on:
@@ -308,7 +314,7 @@ jobs:
       run: gcloud auth configure-docker
     
     - name: Build and push docker image
-      run: |    ## Cambiar el nombre de la aplicacion "nodeapp"
+      run: |    
         docker build -t us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG .  
         docker push us.gcr.io/${{ secrets.GCP_PROJECT_ID }}/pythonappimage:$IMAGE_TAG
       working-directory: ./pythonapp   ## Fijarme en el directorio donde esta la aplicacion
@@ -317,7 +323,7 @@ jobs:
       uses: hashicorp/setup-terraform@v3
 
     - name: Terraform init
-      run: |  ## gcloud auth activate-service-account github-actions@my-project-57433-labmodule2.iam.gserviceaccount.com --project=my-project-57433-labmodule2
+      run: |  ## This command needs to be issued in the google CLI >>   gcloud auth activate-service-account github-actions@my-project-57433-labmodule2.iam.gserviceaccount.com --project=my-project-57433-labmodule2
         terraform init -backend-config="bucket=k8s-terraform-state-file" -backend-config="prefix=test"
       working-directory: ./Terraform
 
