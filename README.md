@@ -345,4 +345,4 @@ jobs:
       run: terraform apply -lock=false PLAN
       working-directory: ./Terraform
 
-<img width="800" alt="Captura de pantalla 2024-05-08 a la(s) 9 57 12 p  m" src="https://github.com/kpavonhu/Lab2/assets/112138880/df3bf83c-efbc-4da2-bdd7-6315170c7320">
+[<img width="800" alt="Captura de pantalla 2024-05-08 a la(s) 9 57 12 p  m" src="https://github.com/kpavonhu/Lab2/assets/112138880/df3bf83c-efbc-4da2-bdd7-6315170c7320">](https://github.com/kpavonhu/Lab2/issues/1#issue-2286862419)
