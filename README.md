@@ -267,8 +267,8 @@ Add secrets to Github Repo
 	name: Deploy to kubernetes
 	on:
   	  push:
-    	    branches:
-      	       - "main"
+    	branches:
+      	  - "main"
 
 	env:
   	   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -277,9 +277,9 @@ Add secrets to Github Repo
 
 	jobs:
   	  deploy:
-    	    runs-on: ubuntu-latest
+    	  runs-on: ubuntu-latest
     	  env:
-            IMAGE_TAG: ${{ github.sha }}
+                IMAGE_TAG: ${{ github.sha }}
 
     permissions:
       contents: 'read'
